@@ -1,4 +1,4 @@
-import './App.css';
+import './Styles.css';
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -13,32 +13,11 @@ const Home = () => (
   </div>
 );
 
-// 创建其他示例页面组件
-const Features = () => (
-  <div className="py-8">
-    <h2 className="text-2xl font-bold mb-4">功能介绍</h2>
-    <p className="text-gray-300">我们提供丰富的功能，满足您的各种需求。</p>
-  </div>
-);
-
-const Services = () => (
-  <div className="py-8">
-    <h2 className="text-2xl font-bold mb-4">我们的服务</h2>
-    <p className="text-gray-300">专业的服务团队，为您提供全面的支持。</p>
-  </div>
-);
-
-const Dashboard = () => (
-  <div className="py-8">
-    <h2 className="text-2xl font-bold mb-4">用户控制台</h2>
-    <p className="text-gray-300">个性化的用户控制面板，管理您的账户和服务。</p>
-  </div>
-);
-
-const Admin = () => (
-  <div className="py-8">
-    <h2 className="text-2xl font-bold mb-4">管理后台</h2>
-    <p className="text-gray-300">强大的管理工具，全面控制您的系统。</p>
+// 创建一个简单的页面组件，用于示例
+const About = () => (
+  <div className="flex justify-center items py-8">
+    <h2 className="text-2xl font-bold mb-4">欢迎来到 About</h2>
+    <p className="text-gray-300">about page</p>
   </div>
 );
 
@@ -95,10 +74,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           {/* 子路由 */}
           <Route index element={<Home />} />
-          <Route path="features" element={<Features />} />
-          <Route path="services" element={<Services />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="admin" element={<Admin />} />
+          <Route path="about" element={<About />} />
 
           {/* 可以根据需要添加更多子路由 */}
         </Route>

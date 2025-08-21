@@ -47,7 +47,7 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: 'theme-storage',
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => state => {
         // 当状态从存储中恢复时，更新DOM
         if (state) {
           document.documentElement.classList.toggle('dark', state.isDark);

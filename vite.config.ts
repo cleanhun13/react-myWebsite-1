@@ -18,4 +18,7 @@ export default defineConfig({
     host: '0.0.0.0', // 允许从任何IP访问
     port: 5173, // 保持默认端口或自定义
   },
+  css: {
+    postcss: {},
+  },
 });

@@ -1,9 +1,49 @@
 import './App.css';
 import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import { useUserStore } from './store';
 
-function App() {
+// 创建一个简单的页面组件，用于示例
+const Home = () => (
+  <div className="py-8">
+    <h2 className="text-2xl font-bold mb-4">欢迎来到 TechNexus</h2>
+    <p className="text-gray-300">这是我们应用的首页。探索我们的服务，发现如何提升您的数字体验。</p>
+  </div>
+);
+
+// 创建其他示例页面组件
+const Features = () => (
+  <div className="py-8">
+    <h2 className="text-2xl font-bold mb-4">功能介绍</h2>
+    <p className="text-gray-300">我们提供丰富的功能，满足您的各种需求。</p>
+  </div>
+);
+
+const Services = () => (
+  <div className="py-8">
+    <h2 className="text-2xl font-bold mb-4">我们的服务</h2>
+    <p className="text-gray-300">专业的服务团队，为您提供全面的支持。</p>
+  </div>
+);
+
+const Dashboard = () => (
+  <div className="py-8">
+    <h2 className="text-2xl font-bold mb-4">用户控制台</h2>
+    <p className="text-gray-300">个性化的用户控制面板，管理您的账户和服务。</p>
+  </div>
+);
+
+const Admin = () => (
+  <div className="py-8">
+    <h2 className="text-2xl font-bold mb-4">管理后台</h2>
+    <p className="text-gray-300">强大的管理工具，全面控制您的系统。</p>
+  </div>
+);
+
+// 创建主布局组件
+const Layout = () => {
   const { isLogin, login, logout } = useUserStore();
 
   // 处理登录按钮点击
@@ -32,30 +72,38 @@ function App() {
   }, [isLogin]);
 
   return (
-    <div className="min-h-screen bg-tech-dark-900 text-white">
+    <div className="min-h-[100vh] min-w-[100vw] bg-tech-dark-900 text-black flex flex-col items-center">
+      {/* 导航栏固定在头部 */}
       <Navbar onLogin={handleLogin} />
-      <main className="container mx-auto px-4 pt-24 pb-16">
-        <h1 className="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-neon-cyan-400">
-          欢迎使用 TechNexus
-        </h1>
 
-        <div className="bg-tech-panel-800 rounded-lg p-6 shadow-glow-primary">
-          <p className="mb-4">当前认证状态: {isLogin ? '已登录' : '未登录'}</p>
-
-          {isLogin ? (
-            <div className="space-y-4">
-              <p>您已成功登录到系统。</p>
-              <button onClick={logout}>注销登录</button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <p>请登录以访问所有功能。</p>
-              <button onClick={handleLogin}>登录演示账户</button>
-            </div>
-          )}
-        </div>
+      {/* 中间内容区域显示子路由页面 */}
+      <main className="flex-1 items-center h-full container mx-auto px-4 pt-24 pb-16">
+        <Outlet />
       </main>
+
+      {/* 底部显示Footer */}
+      <Footer />
     </div>
+  );
+};
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* 使用Layout组件作为父路由，包含共享的导航栏和页脚 */}
+        <Route path="/" element={<Layout />}>
+          {/* 子路由 */}
+          <Route index element={<Home />} />
+          <Route path="features" element={<Features />} />
+          <Route path="services" element={<Services />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="admin" element={<Admin />} />
+
+          {/* 可以根据需要添加更多子路由 */}
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

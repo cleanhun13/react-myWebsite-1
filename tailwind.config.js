@@ -1,9 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // 确保 content 路径正确，Tailwind 会扫描这些文件中的类名
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
     './index.html',
   ],
+  // 配置主题扩展
   theme: {
     extend: {
       // 科技风格颜色系统

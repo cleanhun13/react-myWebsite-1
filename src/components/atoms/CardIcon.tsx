@@ -1,15 +1,20 @@
 import React from 'react';
-import type { CardIconProps } from '@/types/common';
+import type { CardIconProps } from '~/types/common';
+import SvgLoader from './SvgLoader';
 
 function CardIcon(CardIconProps: CardIconProps) {
   return (
     <>
       {/*<!-- Component: Card with icon --> */}
-      <div className="overflow-hidden text-center bg-white rounded shadow-md text-slate-500 shadow-slate-200">
+      <div className="overflow-hidden rounded bg-white text-center text-slate-500 shadow-md shadow-slate-200">
         {/*  <!-- Icon --> */}
         <figure className="p-6 pb-0">
           {CardIconProps.iconName ? (
-            <SvgIcon iconName={CardIconProps.iconName} width={64} height={64} />
+            <SvgLoader
+              iconName={CardIconProps.iconName}
+              alt={CardIconProps.alt || ''}
+              className="mx-auto h-16 w-16"
+            />
           ) : (
             <img src={CardIconProps.iconPath} alt={CardIconProps.alt} />
           )}

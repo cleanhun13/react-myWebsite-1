@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Menu, X, User, LogOut, Sun, Moon, ChevronDown } from 'lucide-react';
-import { useUserStore, useThemeStore } from '../store';
-import DynamicIcon from './DynamicIcon';
+import { useUserStore, useThemeStore } from '../../store';
+import DynamicIcon from '../atoms/DynamicIcon';
 
 interface NavItem {
   id: string;
@@ -75,7 +75,7 @@ const Navbar: React.FC<NavbarProps> = ({
   };
 
   // 过滤导航项，只显示用户有权限访问的
-  const filteredNavItems = navItems.filter((item) => {
+  const filteredNavItems = navItems.filter(item => {
     // 如果需要登录但用户未登录，则不显示
     if (item.requireAuth && !isLogin) return false;
     // 如果是管理员专用但用户不是管理员，则不显示
@@ -98,29 +98,34 @@ const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${className} 
-      h-[50px] md:h-[64px] ${scrolled ? 'bg-tech-dark-900/95 backdrop-blur-md shadow-glow-primary' : 'bg-transparent'}`}
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ease-in-out ${className} 
+      h-[50px] md:h-[64px] ${scrolled ? 'bg-tech-dark-900/95 shadow-glow-primary backdrop-blur-md' : 'bg-transparent'}`}
       style={{ maxWidth: '100vw' }}
     >
-      <div className="w-full px-4 flex flex-row items-center justify-between h-full">
+      <div className="flex h-full w-full flex-row items-center justify-between px-4">
         {/* Logo - 左侧 */}
-        <div className="flex flex-row items-center justify-baseline space-x-2">
-          <div className="p-2 rounded-full hover:bg-tech-panel-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50">
-            <DynamicIcon name={iconName.replace('.svg', '')} className="w-full h-full text-primary-500 hover:scale-125" />
+        <div className="justify-baseline flex flex-row items-center space-x-2">
+          <div className="hover:bg-tech-panel-700 focus:ring-primary-500/50 rounded-full p-2 transition-all duration-300 focus:outline-none focus:ring-2">
+            <DynamicIcon
+              name={iconName.replace('.svg', '')}
+              className="text-primary-500 h-full w-full hover:scale-125"
+            />
           </div>
-          <div className="rounded-full animate-pulse-slow">
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-neon-cyan-500">TechNexus</span>
+          <div className="animate-pulse-slow rounded-full">
+            <span className="from-primary-500 to-neon-cyan-500 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
+              TechNexus
+            </span>
           </div>
         </div>
 
         {/* 桌面端导航菜单 - 中间 */}
-        <nav className="hidden md:flex items-center justify-center space-x-8 flex-1 gap-4">
-          {filteredNavItems.map((item) => (
+        <nav className="hidden flex-1 items-center justify-center gap-4 space-x-8 md:flex">
+          {filteredNavItems.map(item => (
             <a
               key={item.id}
               href={item.href}
               onClick={handleNavItemClick}
-              className="text-gray-300 hover:text-primary-400 font-medium transition-colors duration-300 whitespace-nowrap"
+              className="hover:text-primary-400 whitespace-nowrap font-medium text-gray-300 transition-colors duration-300"
             >
               {item.label}
             </a>
@@ -128,14 +133,18 @@ const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* 桌面端用户操作区 - 右侧 */}
-        <div className="hidden md:flex items-center space-x-3">
+        <div className="hidden items-center space-x-3 md:flex">
           {/* 主题切换按钮 */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-tech-panel-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+            className="hover:bg-tech-panel-700 focus:ring-primary-500/50 rounded-full p-2 transition-all duration-300 focus:outline-none focus:ring-2"
             aria-label="切换主题"
           >
-            {theme === 'dark' ? <Sun className="h-5 w-5 text-yellow-300" /> : <Moon className="h-5 w-5 text-blue-300" />}
+            {theme === 'dark' ? (
+              <Sun className="h-5 w-5 text-yellow-300" />
+            ) : (
+              <Moon className="h-5 w-5 text-blue-300" />
+            )}
           </button>
 
           {/* 用户登录状态 */}
@@ -143,21 +152,23 @@ const Navbar: React.FC<NavbarProps> = ({
             <div className="relative">
               <button
                 onClick={handleUserMenuClick}
-                className="flex items-center space-x-2 px-3 py-2 rounded-full bg-tech-panel-700/50 hover:bg-tech-panel-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+                className="bg-tech-panel-700/50 hover:bg-tech-panel-700 focus:ring-primary-500/50 flex items-center space-x-2 rounded-full px-3 py-2 transition-all duration-300 focus:outline-none focus:ring-2"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-neon-cyan-500 flex items-center justify-center text-white font-medium">
+                <div className="from-primary-500 to-neon-cyan-500 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br font-medium text-white">
                   {username?.charAt(0) || 'U'}
                 </div>
-                <span className="text-sm text-gray-200 hidden lg:inline-block">{username}</span>
-                <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform duration-300 ${showUserDropdown ? 'rotate-180' : ''}`} />
+                <span className="hidden text-sm text-gray-200 lg:inline-block">{username}</span>
+                <ChevronDown
+                  className={`h-4 w-4 text-gray-400 transition-transform duration-300 ${showUserDropdown ? 'rotate-180' : ''}`}
+                />
               </button>
 
               {/* 用户下拉菜单 */}
               {showUserDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-tech-panel-800 rounded-lg shadow-lg border border-tech-line-600 overflow-hidden transition-all duration-300">
+                <div className="bg-tech-panel-800 border-tech-line-600 absolute right-0 mt-2 w-48 overflow-hidden rounded-lg border shadow-lg transition-all duration-300">
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 hover:bg-tech-panel-700 transition-colors duration-200 flex items-center space-x-2"
+                    className="hover:bg-tech-panel-700 flex w-full items-center space-x-2 px-4 py-2 text-left transition-colors duration-200"
                   >
                     <LogOut className="h-4 w-4 text-gray-400" />
                     <span>退出登录</span>
@@ -168,9 +179,9 @@ const Navbar: React.FC<NavbarProps> = ({
           ) : (
             <button
               onClick={onLogin}
-              className="px-4 py-2 rounded-full bg-primary-600 hover:bg-primary-500 text-white font-medium shadow-lg shadow-primary-500/20 hover:shadow-primary-500/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+              className="bg-primary-600 hover:bg-primary-500 shadow-primary-500/20 hover:shadow-primary-500/40 focus:ring-primary-500/50 rounded-full px-4 py-2 font-medium text-white shadow-lg transition-all duration-300 focus:outline-none focus:ring-2"
             >
-              <User className="inline-block mr-2 h-4 w-4" />
+              <User className="mr-2 inline-block h-4 w-4" />
               <span>登录</span>
             </button>
           )}
@@ -178,7 +189,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
         {/* 移动端菜单按钮 */}
         <button
-          className="md:hidden p-2 rounded-md text-gray-300 hover:text-primary-400 hover:bg-tech-panel-700/50 transition-colors duration-200 focus:outline-none"
+          className="hover:text-primary-400 hover:bg-tech-panel-700/50 rounded-md p-2 text-gray-300 transition-colors duration-200 focus:outline-none md:hidden"
           onClick={toggleMenu}
           aria-label={isOpen ? '关闭菜单' : '打开菜单'}
         >
@@ -188,23 +199,30 @@ const Navbar: React.FC<NavbarProps> = ({
 
       {/* 移动端导航菜单 */}
       {isOpen && (
-        <div className="md:hidden bg-tech-panel-800 border-t border-tech-line-600">
-          <div className="container mx-auto px-4 py-3 flex flex-col space-y-1">
+        <div className="bg-tech-panel-800 border-tech-line-600 border-t md:hidden">
+          <div className="container mx-auto flex flex-col space-y-1 px-4 py-3">
             {/* 移动端主题切换 */}
-            <div className="flex justify-between items-center px-3 py-3">
+            <div className="flex items-center justify-between px-3 py-3">
               <span className="text-gray-300">主题</span>
-              <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-tech-panel-700 transition-colors duration-200">
-                {theme === 'dark' ? <Sun className="h-5 w-5 text-yellow-300" /> : <Moon className="h-5 w-5 text-blue-300" />}
+              <button
+                onClick={toggleTheme}
+                className="hover:bg-tech-panel-700 rounded-full p-2 transition-colors duration-200"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="h-5 w-5 text-yellow-300" />
+                ) : (
+                  <Moon className="h-5 w-5 text-blue-300" />
+                )}
               </button>
             </div>
 
             {/* 移动端导航项 */}
-            {filteredNavItems.map((item) => (
+            {filteredNavItems.map(item => (
               <a
                 key={item.id}
                 href={item.href}
                 onClick={handleNavItemClick}
-                className="px-3 py-3 rounded-md text-gray-300 hover:bg-tech-panel-700 hover:text-primary-400 transition-colors duration-300"
+                className="hover:bg-tech-panel-700 hover:text-primary-400 rounded-md px-3 py-3 text-gray-300 transition-colors duration-300"
               >
                 {item.label}
               </a>
@@ -212,11 +230,11 @@ const Navbar: React.FC<NavbarProps> = ({
 
             {/* 移动端用户操作 */}
             {isLogin ? (
-              <div className="mt-2 px-3 py-3 bg-tech-panel-700/30 rounded-md">
-                <p className="text-sm text-gray-300 mb-3">欢迎, {username}</p>
+              <div className="bg-tech-panel-700/30 mt-2 rounded-md px-3 py-3">
+                <p className="mb-3 text-sm text-gray-300">欢迎, {username}</p>
                 <button
                   onClick={logout}
-                  className="w-full py-2 bg-tech-panel-900 hover:bg-tech-panel-800 rounded-md flex items-center justify-center space-x-2 transition-colors duration-200"
+                  className="bg-tech-panel-900 hover:bg-tech-panel-800 flex w-full items-center justify-center space-x-2 rounded-md py-2 transition-colors duration-200"
                 >
                   <LogOut className="h-4 w-4" />
                   <span>退出登录</span>
@@ -225,9 +243,9 @@ const Navbar: React.FC<NavbarProps> = ({
             ) : (
               <button
                 onClick={onLogin}
-                className="w-full mt-2 py-3 bg-primary-600 hover:bg-primary-500 text-white rounded-md font-medium transition-colors duration-200"
+                className="bg-primary-600 hover:bg-primary-500 mt-2 w-full rounded-md py-3 font-medium text-white transition-colors duration-200"
               >
-                <User className="inline-block mr-2 h-4 w-4" />
+                <User className="mr-2 inline-block h-4 w-4" />
                 <span>登录</span>
               </button>
             )}

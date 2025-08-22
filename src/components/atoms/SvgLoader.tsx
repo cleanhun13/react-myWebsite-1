@@ -9,11 +9,11 @@ interface SvgLoaderProps {
 export default function SvgLoader(props: SvgLoaderProps) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [svgSrc, setSvgSrc] = React.useState('');
-  
+
   React.useEffect(() => {
     // 动态导入SVG
-    import(`../assets/icons/${props.iconName}.svg`)
-      .then((module) => {
+    import(`../../assets/icons/${props.iconName}.svg`)
+      .then(module => {
         setSvgSrc(module.default);
         setIsLoading(false);
       })
@@ -22,10 +22,10 @@ export default function SvgLoader(props: SvgLoaderProps) {
         setIsLoading(false);
       });
   }, [props.iconName]);
-  
+
   if (isLoading) {
     return <div className={props.className}>Loading...</div>;
   }
-  
+
   return <img src={svgSrc} alt={props.alt} className={props.className} />;
 }

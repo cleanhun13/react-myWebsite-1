@@ -1,14 +1,80 @@
+@import 'tailwindcss';
 
+/* 科技感主题变量 */
+:root {
+  /* Light Theme Colors */
+  --background: 220 24% 98%;
+  --foreground: 220 26% 14%;
+  --card: 220 24% 96%;
+  --card-foreground: 220 26% 14%;
+  --popover: 220 24% 98%;
+  --popover-foreground: 220 26% 14%;
+  --primary: 200 98% 39%;
+  --primary-foreground: 220 24% 98%;
+  --secondary: 220 13% 91%;
+  --secondary-foreground: 220 26% 14%;
+  --muted: 220 13% 91%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 158 64% 52%;
+  --accent-foreground: 220 24% 98%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 220 24% 98%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 200 98% 39%;
 
-/* 移除与 Tailwind 冲突的样式，只保留必要的全局配置 */
+  /* 科技感渐变 */
+  --gradient-primary: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+  --gradient-secondary: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  --gradient-accent: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
 
-/* 配置字体合成和渲染 */
-:root{
+  /* 科技感阴影 */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-hard: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
+
+  /* 字体合成和渲染优化 */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Dark Theme Colors */
+.dark {
+  --background: 220 26% 7%;
+  --foreground: 220 24% 98%;
+  --card: 220 26% 10%;
+  --card-foreground: 220 24% 98%;
+  --popover: 220 26% 7%;
+  --popover-foreground: 220 24% 98%;
+  --primary: 200 98% 74%;
+  --primary-foreground: 220 26% 7%;
+  --secondary: 220 26% 14%;
+  --secondary-foreground: 220 24% 98%;
+  --muted: 220 26% 14%;
+  --muted-foreground: 220 24% 65%;
+  --accent: 158 64% 71%;
+  --accent-foreground: 220 26% 7%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 220 24% 98%;
+  --border: 220 26% 14%;
+  --input: 220 26% 14%;
+  --ring: 200 98% 74%;
+
+  /* 暗主题渐变 */
+  --gradient-primary: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  --gradient-secondary: linear-gradient(135deg, #047857 0%, #059669 100%);
+  --gradient-accent: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+
+  /* 暗主题阴影 */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-hard: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px rgba(96, 165, 250, 0.4);
+}
+
 /* 基础样式重置 */
 * {
   margin: 0;
@@ -16,61 +82,139 @@
   box-sizing: border-box;
 }
 
+html,
 body {
-  min-width: 320px;
-  min-height: 100vh;
+  height: 100%;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+/* 平滑的主题切换动画 */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* 科技感滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* 科技感选择高亮 */
+::selection {
+  background-color: hsl(var(--primary) / 0.3);
+  color: hsl(var(--primary-foreground));
+}
+
+/* 科技感焦点样式 */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 科技感按钮基础样式 */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 链接样式 */
+a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: hsl(var(--primary) / 0.8);
+  text-decoration: underline;
+}
+
+/* 科技感输入框基础样式 */
+input,
+textarea,
+select {
+  background-color: hsl(var(--input));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+}
+
+/* 科技感卡片基础样式 */
+.card {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-2px);
+}
+
+/* 科技感毛玻璃效果 */
+.glass {
+  backdrop-filter: blur(16px) saturate(180%);
+  background-color: hsl(var(--background) / 0.8);
+  border: 1px solid hsl(var(--border) / 0.2);
+}
+
+/* 科技感发光效果 */
+.glow {
+  box-shadow: var(--shadow-glow);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
   }
 }

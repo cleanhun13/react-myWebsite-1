@@ -7,7 +7,9 @@ type DynamicIconProps = {
   name: string;
   className: string;
   isReactIcons?: boolean;
-  onClick?: (React.MouseEventHandler<HTMLWrapperType> & React.MouseEventHandler<SVGSVGElement>) | undefined;
+  onClick?:
+    | (React.MouseEventHandler<HTMLWrapperType> & React.MouseEventHandler<SVGSVGElement>)
+    | undefined;
   style?: React.CSSProperties & Record<string, string>;
 };
 
@@ -20,7 +22,7 @@ const DynamicIcon: React.FC<DynamicIconProps> = ({
 }: DynamicIconProps) => {
   let strStyle = '';
   if (!isReactIcons) {
-    Object.keys(style).forEach((key) => {
+    Object.keys(style).forEach(key => {
       strStyle += `${key}: ${style[key]};`;
     });
   }
@@ -33,10 +35,10 @@ const DynamicIcon: React.FC<DynamicIconProps> = ({
       loading={() => <span>Loading</span>}
       fallback={() => <div className="h-min">Error!</div>}
       onClick={onClick}
-      onError={(error) => {
+      onError={error => {
         console.error(error);
       }}
-      beforeInjection={(svg) => {
+      beforeInjection={svg => {
         svg.setAttribute('style', strStyle);
       }}
     />

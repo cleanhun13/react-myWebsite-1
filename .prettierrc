@@ -9,8 +9,7 @@
   "arrowParens": "avoid",
   "endOfLine": "auto",
   "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindStylesheet": "./Styles.css",
-  "tailwindAttributes": ["myClassList"],
-  "tailwindFunctions": ["clsx"],
-  "tailwindPreserveWhitespace": true
+  "tailwindConfig": "./tailwind.config.js",
+  "tailwindFunctions": ["tw"],
+  "tailwindAttributes": ["className"]
 }

@@ -1,0 +1,155 @@
+<!-- RGB变量测试页面 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RGB变量测试</title>
+  <style>
+    :root {
+      /* RGB变量 */
+      --primary-rgb: 14, 165, 233;
+      --primary-light-rgb: 56, 189, 248;
+      --primary-dark-rgb: 3, 105, 161;
+      --white-rgb: 255, 255, 255;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9fafb;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+
+    .title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .swatches {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .swatch {
+      height: 50px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .rgb-var {
+      background-color: rgb(var(--primary-rgb));
+    }
+
+    .rgb-var-opacity {
+      background-color: rgb(var(--primary-rgb) / 0.5);
+    }
+
+    .rgb-light {
+      background-color: rgb(var(--primary-light-rgb));
+    }
+
+    .rgb-dark {
+      background-color: rgb(var(--primary-dark-rgb));
+    }
+
+    .hex {
+      background-color: #0ea5e9;
+    }
+
+    .inline-rgb {
+      background-color: rgb(14, 165, 233);
+    }
+
+    .inline-rgba {
+      background-color: rgba(14, 165, 233, 0.5);
+    }
+
+    .hsl {
+      background-color: hsl(199, 89%, 48%);
+    }
+
+    .hsla {
+      background-color: hsla(199, 89%, 48%, 0.5);
+    }
+
+    .button {
+      background-color: rgb(var(--primary-rgb));
+      color: rgb(var(--white-rgb));
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .button:hover {
+      background-color: rgb(var(--primary-dark-rgb));
+      transform: translateY(-1px);
+    }
+
+    .button:active {
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+  <h1>RGB 变量测试</h1>
+  
+  <div class="container">
+    <div class="card">
+      <div class="title">使用CSS变量（RGB格式）</div>
+      <div class="swatches">
+        <div class="swatch rgb-var">rgb(var(--primary-rgb))</div>
+        <div class="swatch rgb-var-opacity">rgb(var(--primary-rgb) / 0.5)</div>
+        <div class="swatch rgb-light">rgb(var(--primary-light-rgb))</div>
+        <div class="swatch rgb-dark">rgb(var(--primary-dark-rgb))</div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="title">直接使用颜色值</div>
+      <div class="swatches">
+        <div class="swatch hex">#0ea5e9（HEX）</div>
+        <div class="swatch inline-rgb">rgb(14, 165, 233)（RGB）</div>
+        <div class="swatch inline-rgba">rgba(14, 165, 233, 0.5)（RGBA）</div>
+        <div class="swatch hsl">hsl(199, 89%, 48%)（HSL）</div>
+        <div class="swatch hsla">hsla(199, 89%, 48%, 0.5)（HSLA）</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="title">RGB变量用于交互元素</div>
+      <p>RGB变量可以轻松地用于交互元素和状态变化，例如这个按钮：</p>
+      <button class="button">使用RGB变量的按钮</button>
+    </div>
+  </div>
+</body>
+</html>

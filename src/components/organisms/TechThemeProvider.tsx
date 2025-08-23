@@ -14,11 +14,31 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
   enableGradients = true,
   enableGlow = true,
 }) => {
-  const { initializeTheme } = useThemeStore();
+  const { theme, isDark, isSystemTheme, systemTheme, initializeTheme, getThemeValue } =
+    useThemeStore();
   const [mounted, setMounted] = useState(false);
 
+  // 应用主题通过 data-theme 属性
   useEffect(() => {
-    // 初始化主题
+    // 获取当前应该使用的主题值
+    const themeValue = getThemeValue();
+    const root = document.documentElement;
+
+    // 设置 data-theme 属性
+    root.setAttribute('data-theme', themeValue);
+
+    // 处理深色模式类
+    if (themeValue === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+
+    console.log(`主题应用：${themeValue}`);
+  }, [theme, isSystemTheme, systemTheme, getThemeValue]);
+
+  // 初始化主题和组件挂载
+  useEffect(() => {
     initializeTheme();
     setMounted(true);
 
@@ -27,18 +47,24 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
 
     if (enableAnimations) {
       root.classList.add('tech-animations');
+    } else {
+      root.classList.remove('tech-animations');
     }
 
     if (enableGradients) {
       root.classList.add('tech-gradients');
+    } else {
+      root.classList.remove('tech-gradients');
     }
 
     if (enableGlow) {
       root.classList.add('tech-glow');
+    } else {
+      root.classList.remove('tech-glow');
     }
 
     // 添加 meta 标签用于移动端主题颜色
-    const addMetaThemeColor = () => {
+    const setupMetaThemeColor = () => {
       let metaThemeColor = document.querySelector('meta[name="theme-color"]');
       if (!metaThemeColor) {
         metaThemeColor = document.createElement('meta');
@@ -48,12 +74,11 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
       return metaThemeColor;
     };
 
-    const metaThemeColor = addMetaThemeColor();
+    const metaThemeColor = setupMetaThemeColor();
 
-    // 根据主题设置 meta theme-color
+    // 更新 meta theme-color
     const updateMetaThemeColor = () => {
-      const isDarkTheme = document.documentElement.classList.contains('dark');
-      metaThemeColor.setAttribute('content', isDarkTheme ? '#0f172a' : '#ffffff');
+      metaThemeColor.setAttribute('content', isDark ? '#0f172a' : '#ffffff');
     };
 
     updateMetaThemeColor();
@@ -61,7 +86,10 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
     // 监听主题变化
     const observer = new MutationObserver(mutations => {
       mutations.forEach(mutation => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+        if (
+          mutation.type === 'attributes' &&
+          (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme')
+        ) {
           updateMetaThemeColor();
         }
       });
@@ -69,13 +97,13 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
 
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['class'],
+      attributeFilter: ['class', 'data-theme'],
     });
 
     return () => {
       observer.disconnect();
     };
-  }, [initializeTheme, enableAnimations, enableGradients, enableGlow]);
+  }, [initializeTheme, enableAnimations, enableGradients, enableGlow, isDark]);
 
   // 避免水合不匹配，在客户端挂载前显示加载状态
   if (!mounted) {
@@ -91,17 +119,7 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
   return (
     <>
       <div
-        className={`
-          bg-background 
-          text-foreground 
-          min-h-screen 
-          transition-colors 
-          duration-300 
-          ease-in-out
-          ${enableAnimations ? 'tech-animations' : ''}
-          ${enableGradients ? 'tech-gradients' : ''}
-          ${enableGlow ? 'tech-glow' : ''}
-        `}
+        className={`bg-background text-foreground min-h-screen transition-colors duration-300 ease-in-out ${enableAnimations ? 'tech-animations' : ''} ${enableGradients ? 'tech-gradients' : ''} ${enableGlow ? 'tech-glow' : ''} `}
       >
         {children}
       </div>
@@ -136,29 +154,30 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
         }
         
         .tech-scrollbar::-webkit-scrollbar-track {
-          background: hsl(var(--muted));
+          background: var(--muted);
           border-radius: 4px;
         }
         
         .tech-scrollbar::-webkit-scrollbar-thumb {
-          background: hsl(var(--muted-foreground));
+          background: var(--muted-foreground);
           border-radius: 4px;
           transition: background-color 0.3s ease;
         }
         
         .tech-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: hsl(var(--primary));
+          background: var(--primary);
         }
         
         /* 科技感选择高亮 */
         ::selection {
-          background-color: hsl(var(--primary) / 0.3);
-          color: hsl(var(--primary-foreground));
+          background-color: var(--primary);
+          opacity: 0.3;
+          color: var(--primary-foreground);
         }
         
         /* 科技感焦点环 */
         .tech-focus:focus-visible {
-          outline: 2px solid hsl(var(--ring));
+          outline: 2px solid var(--ring);
           outline-offset: 2px;
           border-radius: 8px;
         }
@@ -166,28 +185,29 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
         /* 毛玻璃效果 */
         .glass-effect {
           backdrop-filter: blur(16px) saturate(180%);
-          background-color: hsl(var(--background) / 0.8);
-          border: 1px solid hsl(var(--border) / 0.2);
+          background-color: var(--background);
+          opacity: 0.8;
+          border: 1px solid var(--border);
         }
         
         /* 科技感网格背景 */
         .tech-grid {
           background-image: 
-            linear-gradient(rgba(var(--foreground) / 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(var(--foreground) / 0.05) 1px, transparent 1px);
+            linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
           background-size: 20px 20px;
         }
         
         /* 科技感点状背景 */
         .tech-dots {
-          background-image: radial-gradient(circle, rgba(var(--foreground) / 0.1) 1px, transparent 1px);
+          background-image: radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
           background-size: 16px 16px;
         }
         
         /* 科技感渐变边框 */
         .gradient-border {
           position: relative;
-          background: hsl(var(--background));
+          background: var(--background);
         }
         
         .gradient-border::before {
@@ -217,9 +237,10 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
           background: linear-gradient(
             90deg,
             transparent,
-            rgba(var(--primary) / 0.2),
+            var(--primary),
             transparent
           );
+          opacity: 0.2;
           animation: loading-shimmer 2s infinite;
         }
         
@@ -243,6 +264,17 @@ const TechThemeProvider: React.FC<TechThemeProviderProps> = ({
             animation-iteration-count: 1 !important;
             transition-duration: 0.01ms !important;
           }
+        }
+
+        /* 暗色主题特殊样式 */
+        [data-theme='dark'] .tech-grid {
+          background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+        
+        [data-theme='dark'] .tech-dots {
+          background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
         }
       `,
         }}

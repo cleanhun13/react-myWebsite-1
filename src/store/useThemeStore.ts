@@ -11,6 +11,7 @@ interface ThemeState {
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
   initializeTheme: () => void;
+  getThemeValue: () => 'light' | 'dark'; // 新增：获取实际主题值
 }
 
 // 检测系统主题偏好
@@ -19,24 +20,8 @@ const getSystemTheme = (): 'light' | 'dark' => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
 
-// 应用主题到 DOM
-const applyTheme = (isDark: boolean) => {
-  const root = document.documentElement;
-
-  if (isDark) {
-    root.classList.add('dark');
-    root.setAttribute('data-theme', 'dark');
-  } else {
-    root.classList.remove('dark');
-    root.setAttribute('data-theme', 'light');
-  }
-
-  // 设置 meta theme-color 以支持移动端状态栏
-  const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-  if (metaThemeColor) {
-    metaThemeColor.setAttribute('content', isDark ? '#0f172a' : '#ffffff');
-  }
-};
+// 检测系统主题偏好函数已足够，移除应用主题函数
+// 应用主题将在组件中通过 useEffect 处理
 
 // 创建主题状态存储
 export const useThemeStore = create<ThemeState>()(
@@ -47,6 +32,15 @@ export const useThemeStore = create<ThemeState>()(
       isDark: false,
       isSystemTheme: true,
       systemTheme: getSystemTheme(),
+
+      // 获取实际主题值（考虑系统主题）
+      getThemeValue: () => {
+        const { theme, systemTheme } = get();
+        if (theme === 'system') {
+          return systemTheme;
+        }
+        return theme as 'light' | 'dark';
+      },
 
       // 初始化主题
       initializeTheme: () => {
@@ -72,7 +66,7 @@ export const useThemeStore = create<ThemeState>()(
             break;
         }
 
-        applyTheme(isDark);
+        // 设置 data-theme 属性将在组件内通过 useEffect 处理
 
         set({
           isDark,
@@ -109,7 +103,7 @@ export const useThemeStore = create<ThemeState>()(
             break;
         }
 
-        applyTheme(isDark);
+        // 设置 data-theme 属性将在组件内通过 useEffect 处理
 
         set({
           theme,
@@ -144,16 +138,7 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: 'theme-storage',
-      version: 1,
-      onRehydrateStorage: () => state => {
-        // 当状态从存储中恢复时，初始化主题
-        if (state) {
-          // 延迟执行以确保 DOM 已准备好
-          setTimeout(() => {
-            state.initializeTheme();
-          }, 0);
-        }
-      },
+      version: 2,
     }
   )
 );
@@ -172,9 +157,7 @@ if (typeof window !== 'undefined') {
     // 如果当前使用系统主题，则更新显示
     if (store.isSystemTheme) {
       const isDark = newSystemTheme === 'dark';
-      applyTheme(isDark);
       useThemeStore.setState({ isDark });
-
       console.log('系统主题已变更:', newSystemTheme);
     }
   });
@@ -183,7 +166,6 @@ if (typeof window !== 'undefined') {
 // 导出主题相关工具函数
 export const themeUtils = {
   getSystemTheme,
-  applyTheme,
 
   // 获取当前主题的 CSS 变量值
   getCSSVariable: (variable: string): string => {

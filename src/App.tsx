@@ -1,4 +1,4 @@
-import './Styles.css';
+import './index.css';
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { Navbar } from './components';
@@ -6,6 +6,12 @@ import { Footer } from './components';
 import { TechThemeProvider } from './components/organisms';
 import { useUserStore } from './store';
 import TechDemoPage from './pages/TechDemoPage';
+import ThemePreview from './pages/ThemePreview';
+import ColorTest from './pages/ColorTest';
+import ColorConfirmation from './pages/ColorConfirmation';
+import ColorSystemTest from './pages/ColorSystemTest';
+import SimpleColorTest from './pages/SimpleColorTest';
+import HSLColorTest from './pages/HSLColorTest';
 
 // 创建一个简单的页面组件，用于示例
 const Home = () => (
@@ -95,7 +101,7 @@ const Layout = () => {
       <Navbar onLogin={handleLogin} />
 
       {/* 中间内容区域显示子路由页面 */}
-      <main className="container mx-auto flex-1 px-4 pb-16 pt-24">
+      <main className="container mx-auto flex-1 px-4 pt-24 pb-16">
         <Outlet />
       </main>
 
@@ -116,6 +122,12 @@ function App() {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="demo" element={<TechDemoPage />} />
+            <Route path="theme-preview" element={<ThemePreview />} />
+            <Route path="color-test" element={<ColorTest />} />
+            <Route path="color-confirm" element={<ColorConfirmation />} />
+            <Route path="color-system" element={<ColorSystemTest />} />
+            <Route path="simple-color" element={<SimpleColorTest />} />
+            <Route path="hsl-color" element={<HSLColorTest />} />
 
             {/* 可以根据需要添加更多子路由 */}
           </Route>

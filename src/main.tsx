@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { useUserStore, useThemeStore } from './store';
-import './Styles.css';
 
 // 初始化应用状态
 const initializeApp = () => {

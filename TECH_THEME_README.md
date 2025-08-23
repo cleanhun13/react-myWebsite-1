@@ -63,6 +63,185 @@ pnpm dev
 - **Vite** - 构建工具
 - **Lucide React** - 图标库
 
+### Lucide React 基本用法
+
+```tsx
+// 1. 引入图标
+import { Sun, Moon, Star, Heart, Download } from 'lucide-react';
+
+// 2. 在组件中使用
+const MyComponent = () => {
+  return (
+    <div>
+      {/* 基本用法 */}
+      <Sun />
+      <Moon className="ml-2" />
+      {/* 设置大小 */}
+      <Star size={24} /> {/* 直接设置大小 */}
+      <Heart className="w-6 h-6" /> {/* 使用类设置大小 */}
+      {/* 设置颜色 */}
+      <Download color="#3b82f6" /> {/* 直接设置颜色 */}
+      <Star className="text-primary" /> {/* 使用 Tailwind 类设置颜色 */}
+      {/* 描边宽度 */}
+      <Moon strokeWidth={1.5} />
+      {/* 添加动画效果 */}
+      <Heart className="text-red-500 hover:scale-110 transition-transform" />
+    </div>
+  );
+};
+```
+
+### 与 UI 组件结合使用
+
+```tsx
+// 在按钮中使用图标
+import { TechButton } from './components/atoms';
+import { Rocket, Download, ArrowRight } from 'lucide-react';
+
+const ButtonWithIcons = () => (
+  <div className="flex gap-2">
+    <TechButton icon={<Rocket />}>发射</TechButton>
+    <TechButton variant="secondary" icon={<Download />}>
+      下载
+    </TechButton>
+    <TechButton variant="gradient">
+      前进 <ArrowRight className="ml-2" />
+    </TechButton>
+  </div>
+);
+
+// 在输入框中使用图标
+import { TechInput } from './components/atoms';
+import { Mail, Search, Lock } from 'lucide-react';
+
+const InputWithIcons = () => (
+  <div className="space-y-4">
+    <TechInput icon={<Mail />} placeholder="邮箱地址" />
+    <TechInput icon={<Search />} placeholder="搜索..." />
+    <TechInput type="password" icon={<Lock />} placeholder="密码" />
+  </div>
+);
+
+// 在卡片中使用图标
+import { TechCard } from './components/atoms';
+import { Shield, Zap, Code } from 'lucide-react';
+
+const CardWithIcons = () => (
+  <TechCard variant="gradient">
+    <div className="flex items-center gap-3">
+      <Shield className="text-primary h-8 w-8" />
+      <div>
+        <h3 className="text-lg font-bold">安全保障</h3>
+        <p className="text-sm">先进的加密技术</p>
+      </div>
+    </div>
+  </TechCard>
+);
+```
+
+### 高级用法与技巧
+
+```tsx
+import React from 'react';
+import { Zap, Settings, Loader2, Moon, Sun, Monitor } from 'lucide-react';
+
+// 创建动态图标组件
+type IconProps = React.ComponentProps<typeof Zap>;
+
+const DynamicIcon: React.FC<{ name: string } & IconProps> = ({ name, ...props }) => {
+  const iconMap: Record<string, React.ReactNode> = {
+    zap: <Zap {...props} />,
+    settings: <Settings {...props} />,
+    loading: <Loader2 {...props} className={`animate-spin ${props.className || ''}`} />,
+    moon: <Moon {...props} />,
+    sun: <Sun {...props} />,
+    monitor: <Monitor {...props} />,
+  };
+
+  return <>{iconMap[name.toLowerCase()] || null}</>;
+};
+
+// 使用示例
+const IconUsage = () => {
+  return (
+    <div className="flex space-x-4">
+      <DynamicIcon name="zap" className="text-yellow-500" />
+      <DynamicIcon name="settings" className="text-blue-500" size={24} />
+      <DynamicIcon name="loading" className="text-green-500" />
+
+      {/* 主题相关图标 */}
+      <div className="flex items-center gap-2 p-2 bg-muted rounded">
+        <DynamicIcon name="sun" className="text-amber-500" />
+        <DynamicIcon name="moon" className="text-indigo-400" />
+        <DynamicIcon name="monitor" className="text-gray-500" />
+      </div>
+    </div>
+  );
+};
+
+// 创建带交互的图标按钮
+const IconButton: React.FC<{
+  icon: React.ReactNode;
+  activeIcon?: React.ReactNode;
+  active?: boolean;
+  onClick?: () => void;
+  tooltip?: string;
+}> = ({ icon, activeIcon, active, onClick, tooltip }) => {
+  return (
+    <button
+      className={`
+        p-2 rounded-full transition-all duration-300
+        ${
+          active
+            ? 'bg-primary/20 text-primary hover:bg-primary/30'
+            : 'bg-background text-foreground hover:bg-muted'
+        }
+      `}
+      onClick={onClick}
+      title={tooltip}
+    >
+      {active && activeIcon ? activeIcon : icon}
+    </button>
+  );
+};
+
+// 使用示例
+const InteractiveIcons = () => {
+  const [liked, setLiked] = React.useState(false);
+
+  return (
+    <div className="flex gap-3">
+      <IconButton
+        icon={<Heart />}
+        activeIcon={<Heart fill="currentColor" />}
+        active={liked}
+        onClick={() => setLiked(!liked)}
+        tooltip="收藏"
+      />
+
+      {/* 其他图标按钮... */}
+    </div>
+  );
+};
+```
+
+### 常用图标参考
+
+本项目中常用的 Lucide React 图标：
+
+| 分类     | 图标                                                       |
+| -------- | ---------------------------------------------------------- |
+| 界面控制 | `Menu`, `X`, `ChevronDown`, `Search`, `Settings`, `Filter` |
+| 主题     | `Sun`, `Moon`, `Monitor`                                   |
+| 用户相关 | `User`, `LogOut`, `LogIn`, `Mail`, `Lock`                  |
+| 操作反馈 | `Check`, `X`, `AlertCircle`, `Loader2`                     |
+| 功能图标 | `Download`, `Upload`, `Share`, `Edit`, `Trash`             |
+| 内容图标 | `File`, `Folder`, `Image`, `Video`, `Music`                |
+| 表达图标 | `Heart`, `Star`, `ThumbsUp`, `ThumbsDown`                  |
+| 科技图标 | `Code`, `Zap`, `Shield`, `Rocket`                          |
+
+更多图标请访问 [Lucide Icons 官方网站](https://lucide.dev/icons/)，浏览完整图标库。\*\* - 图标库
+
 ## 🎯 核心组件
 
 ### ThemeToggle 主题切换器

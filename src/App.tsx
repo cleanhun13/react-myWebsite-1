@@ -5,13 +5,6 @@ import { Navbar } from './components';
 import { Footer } from './components';
 import { TechThemeProvider } from './components/organisms';
 import { useUserStore } from './store';
-import TechDemoPage from './pages/TechDemoPage';
-import ThemePreview from './pages/ThemePreview';
-import ColorTest from './pages/ColorTest';
-import ColorConfirmation from './pages/ColorConfirmation';
-import ColorSystemTest from './pages/ColorSystemTest';
-import SimpleColorTest from './pages/SimpleColorTest';
-import HSLColorTest from './pages/HSLColorTest';
 
 // 创建一个简单的页面组件，用于示例
 const Home = () => (
@@ -121,13 +114,6 @@ function App() {
             {/* 子路由 */}
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
-            <Route path="demo" element={<TechDemoPage />} />
-            <Route path="theme-preview" element={<ThemePreview />} />
-            <Route path="color-test" element={<ColorTest />} />
-            <Route path="color-confirm" element={<ColorConfirmation />} />
-            <Route path="color-system" element={<ColorSystemTest />} />
-            <Route path="simple-color" element={<SimpleColorTest />} />
-            <Route path="hsl-color" element={<HSLColorTest />} />
 
             {/* 可以根据需要添加更多子路由 */}
           </Route>
